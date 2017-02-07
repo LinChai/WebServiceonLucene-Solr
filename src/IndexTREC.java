@@ -51,10 +51,10 @@ public class IndexTREC {
 		Date start = new Date();
 		try {
 			System.out.println("Indexing to directory '" + indexPath + "'...");
-
-			Directory dir = FSDirectory.open(new File(indexPath));
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
-			IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_41, analyzer);
+      File indexFile = new File(indexPath);
+			Directory dir = FSDirectory.open(indexFile.toPath());
+			Analyzer analyzer = new StandardAnalyzer();
+			IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
 
 			if (create) {
 				// Create a new index in the directory, removing any
