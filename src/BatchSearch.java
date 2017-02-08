@@ -57,7 +57,7 @@ public class BatchSearch {
 
 		Similarity simfn = null;
 		if ("default".equals(simstring)) {
-			simfn = new DefaultSimilarity();
+			simfn = new ClassicSimilarity();
 		} else if ("bm25".equals(simstring)) {
 			simfn = new BM25Similarity();
 		} else if ("dfr".equals(simstring)) {
@@ -74,10 +74,12 @@ public class BatchSearch {
 			System.exit(0);
 		}
 		
-		IndexReader reader = DirectoryReader.open(FSDirectory.open(new File(index)));
+        File indexFile = new File(index);
+		IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile.toPath()));
 		IndexSearcher searcher = new IndexSearcher(reader);
 		searcher.setSimilarity(simfn);
-		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
+		//Analyzer analyzer = new StandardAnalyzer();
+		Analyzer analyzer = new MyAnalyzer();
 		
 		BufferedReader in = null;
 		if (queries != null) {
@@ -85,7 +87,10 @@ public class BatchSearch {
 		} else {
 			in = new BufferedReader(new InputStreamReader(new FileInputStream("queries"), "UTF-8"));
 		}
-		QueryParser parser = new QueryParser(Version.LUCENE_41, field, analyzer);
+		QueryParser parser = new QueryParser(field, analyzer);
+        //starttime
+        int count = 0;
+        long starttime = System.nanoTime();
 		while (true) {
 			String line = in.readLine();
 
@@ -100,9 +105,14 @@ public class BatchSearch {
 			
 			String[] pair = line.split(" ", 2);
 			Query query = parser.parse(pair[1]);
-
+            count++;
 			doBatchSearch(in, searcher, pair[0], query, simstring);
 		}
+        //endtime
+        long endtime = System.nanoTime();
+        long duration = endtime - starttime;
+        System.out.println("total time is " + duration + " for " + count + " queries.");
+        System.out.println("average time is: " + (double)duration / (double) count);
 		reader.close();
 	}
 
