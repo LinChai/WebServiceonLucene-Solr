@@ -70,7 +70,7 @@ public class SearchFiles {
     
     IndexReader reader = DirectoryReader.open(FSDirectory.open(new File(index)));
     IndexSearcher searcher = new IndexSearcher(reader);
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
+    Analyzer analyzer = new StandardAnalyzer();
 
     BufferedReader in = null;
     if (queries != null) {
