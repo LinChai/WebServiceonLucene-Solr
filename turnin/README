@@ -1,0 +1,33 @@
+java -cp "bin:../lib/*:./" BatchSearch -index ./index/ -queries ../test-data/title-queries.301-450 -simfn default > ../default.out
+
+java -cp "bin:../lib/*:./" BatchSearch -index ./index/ -queries ../test-data/title-queries.301-450 -simfn bm25 > ../bm25.out
+
+[linchai@csil-01 WebServiceonLucene-Solr]$ ./trec_eval -q -M1000 -m map -m P.5,10 -m ndcg_cut.5,10 test-data/qrels.trec6-8.nocr ./bm25.out  > q_M1000_bm25_measure
+
+[linchai@csil-01 WebServiceonLucene-Solr]$ ./trec_eval -q -M1000 -m map -m P.5,10 -m ndcg_cut.5,10 test-data/qrels.trec6-8.nocr ./default.out  > q_M1000_default_measure
+
+
+default average query time: 6650814.6 ns
+/*
+total time is 997622190 for 150 queries.
+average time is: 6650814.6
+*/ 
+
+bm25 average query time: 6681832.6 ns
+/*total time is 1002274891 for 150 queries.
+average time is: 6681832.606666666*/
+
+
+[linchai@csil-01 src]$ java -cp "bin:../lib/*:./" IndexTREC -docs ../../trec_xml/ -index ./index-stemming
+Indexing to directory './index-stemming'...
+Reading ../../trec_xml/trec-disk4-5.xml
+132949 total milliseconds
+
+
+default stemming average query time: 7714136 ns
+total time is 1157120509 for 150 queries.
+average time is: 7714136.726666667
+
+bm25 stemming average query time: 7404219.52 ns
+total time is 1110632928 for 150 queries.
+average time is: 7404219.52
