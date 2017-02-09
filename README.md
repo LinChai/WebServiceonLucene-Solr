@@ -5,6 +5,13 @@ This project is a demonstration of a very simple IR evaluation experiment.  It i
 
 I wrote this demo for a short course on IR evaluation.  It is only meant as a working example for pedagogical purposes.  It is based on the open-source Lucene toolkit, and is designed to work around a frequently cited collection from the TREC evaluations.
 
+Alternative to build
+---------
+`javac -cp "bin:../lib/*" MyAnalyzer.java BatchSearch.java`
+
+
+`javac -cp "bin:../lib/*" MyAnalyzer.java IndexTREC.java TrecDocIterator.java`
+
 Ingredients
 ---------
 
